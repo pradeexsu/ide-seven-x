@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+   <title>online ide</title>
+
+    <!-- codemirror style -->
+    <style type="text/css">
+        .CodeMirror{font-family:monospace;height:300px;color:#000;direction:ltr}.CodeMirror-lines{padding:4px 0}.CodeMirror pre.CodeMirror-line,.CodeMirror pre.CodeMirror-line-like{padding:0 4px}.CodeMirror-gutter-filler,.CodeMirror-scrollbar-filler{background-color:#fff}.CodeMirror-gutters{border-right:1px solid #ddd;background-color:#f7f7f7;white-space:nowrap}.CodeMirror-linenumber{padding:0 3px 0 5px;min-width:20px;text-align:right;color:#999;white-space:nowrap}.CodeMirror-guttermarker{color:#000}.CodeMirror-guttermarker-subtle{color:#999}.CodeMirror-cursor{border-left:1px solid #000;border-right:none;width:0}.CodeMirror div.CodeMirror-secondarycursor{border-left:1px solid silver}.cm-fat-cursor .CodeMirror-cursor{width:auto;border:0!important;background:#7e7}.cm-fat-cursor div.CodeMirror-cursors{z-index:1}.cm-fat-cursor-mark{background-color:rgba(20,255,20,.5);-webkit-animation:blink 1.06s steps(1) infinite;-moz-animation:blink 1.06s steps(1) infinite;animation:blink 1.06s steps(1) infinite}.cm-animate-fat-cursor{width:auto;border:0;-webkit-animation:blink 1.06s steps(1) infinite;-moz-animation:blink 1.06s steps(1) infinite;animation:blink 1.06s steps(1) infinite;background-color:#7e7}@-moz-keyframes blink{50%{background-color:transparent}}@-webkit-keyframes blink{50%{background-color:transparent}}@keyframes blink{50%{background-color:transparent}}.cm-tab{display:inline-block;text-decoration:inherit}.CodeMirror-rulers{position:absolute;left:0;right:0;top:-50px;bottom:0;overflow:hidden}.CodeMirror-ruler{border-left:1px solid #ccc;top:0;bottom:0;position:absolute}.cm-s-default .cm-header{color:#00f}.cm-s-default .cm-quote{color:#090}.cm-negative{color:#d44}.cm-positive{color:#292}.cm-header,.cm-strong{font-weight:700}.cm-em{font-style:italic}.cm-link{text-decoration:underline}.cm-strikethrough{text-decoration:line-through}.cm-s-default .cm-keyword{color:#708}.cm-s-default .cm-atom{color:#219}.cm-s-default .cm-number{color:#164}.cm-s-default .cm-def{color:#00f}.cm-s-default .cm-variable-2{color:#05a}.cm-s-default .cm-type,.cm-s-default .cm-variable-3{color:#085}.cm-s-default .cm-comment{color:#a50}.cm-s-default .cm-string{color:#a11}.cm-s-default .cm-string-2{color:#f50}.cm-s-default .cm-meta{color:#555}.cm-s-default .cm-qualifier{color:#555}.cm-s-default .cm-builtin{color:#30a}.cm-s-default .cm-bracket{color:#997}.cm-s-default .cm-tag{color:#170}.cm-s-default .cm-attribute{color:#00c}.cm-s-default .cm-hr{color:#999}.cm-s-default .cm-link{color:#00c}.cm-s-default .cm-error{color:red}.cm-invalidchar{color:red}.CodeMirror-composing{border-bottom:2px solid}div.CodeMirror span.CodeMirror-matchingbracket{color:#0b0}div.CodeMirror span.CodeMirror-nonmatchingbracket{color:#a22}.CodeMirror-matchingtag{background:rgba(255,150,0,.3)}.CodeMirror-activeline-background{background:#e8f2ff}.CodeMirror{position:relative;overflow:hidden;background:#fff}.CodeMirror-scroll{overflow:scroll!important;margin-bottom:-50px;margin-right:-50px;padding-bottom:50px;height:100%;outline:0;position:relative}.CodeMirror-sizer{position:relative;border-right:50px solid transparent}.CodeMirror-gutter-filler,.CodeMirror-hscrollbar,.CodeMirror-scrollbar-filler,.CodeMirror-vscrollbar{position:absolute;z-index:6;display:none;outline:0}.CodeMirror-vscrollbar{right:0;top:0;overflow-x:hidden;overflow-y:scroll}.CodeMirror-hscrollbar{bottom:0;left:0;overflow-y:hidden;overflow-x:scroll}.CodeMirror-scrollbar-filler{right:0;bottom:0}.CodeMirror-gutter-filler{left:0;bottom:0}.CodeMirror-gutters{position:absolute;left:0;top:0;min-height:100%;z-index:3}.CodeMirror-gutter{white-space:normal;height:100%;display:inline-block;vertical-align:top;margin-bottom:-50px}.CodeMirror-gutter-wrapper{position:absolute;z-index:4;background:0 0!important;border:none!important}.CodeMirror-gutter-background{position:absolute;top:0;bottom:0;z-index:4}.CodeMirror-gutter-elt{position:absolute;cursor:default;z-index:4}.CodeMirror-gutter-wrapper ::selection{background-color:transparent}.CodeMirror-gutter-wrapper ::-moz-selection{background-color:transparent}.CodeMirror-lines{cursor:text;min-height:1px}.CodeMirror pre.CodeMirror-line,.CodeMirror pre.CodeMirror-line-like{-moz-border-radius:0;-webkit-border-radius:0;border-radius:0;border-width:0;background:0 0;font-family:inherit;font-size:inherit;margin:0;white-space:pre;word-wrap:normal;line-height:inherit;color:inherit;z-index:2;position:relative;overflow:visible;-webkit-tap-highlight-color:transparent;-webkit-font-variant-ligatures:contextual;font-variant-ligatures:contextual}.CodeMirror-wrap pre.CodeMirror-line,.CodeMirror-wrap pre.CodeMirror-line-like{word-wrap:break-word;white-space:pre-wrap;word-break:normal}.CodeMirror-linebackground{position:absolute;left:0;right:0;top:0;bottom:0;z-index:0}.CodeMirror-linewidget{position:relative;z-index:2;padding:.1px}.CodeMirror-rtl pre{direction:rtl}.CodeMirror-code{outline:0}.CodeMirror-gutter,.CodeMirror-gutters,.CodeMirror-linenumber,.CodeMirror-scroll,.CodeMirror-sizer{-moz-box-sizing:content-box;box-sizing:content-box}.CodeMirror-measure{position:absolute;width:100%;height:0;overflow:hidden;visibility:hidden}.CodeMirror-cursor{position:absolute;pointer-events:none}.CodeMirror-measure pre{position:static}div.CodeMirror-cursors{visibility:hidden;position:relative;z-index:3}div.CodeMirror-dragcursors{visibility:visible}.CodeMirror-focused div.CodeMirror-cursors{visibility:visible}.CodeMirror-selected{background:#d9d9d9}.CodeMirror-focused .CodeMirror-selected{background:#d7d4f0}.CodeMirror-crosshair{cursor:crosshair}.CodeMirror-line::selection,.CodeMirror-line>span::selection,.CodeMirror-line>span>span::selection{background:#d7d4f0}.CodeMirror-line::-moz-selection,.CodeMirror-line>span::-moz-selection,.CodeMirror-line>span>span::-moz-selection{background:#d7d4f0}.cm-searching{background-color:#ffa;background-color:rgba(255,255,0,.4)}.cm-force-border{padding-right:.1px}@media print{.CodeMirror div.CodeMirror-cursors{visibility:hidden}}.cm-tab-wrap-hack:after{content:''}span.CodeMirror-selectedtext{background:0 0}
+    </style>
+    <!-- <link type="text/css" rel="stylesheet"  href="codemirror.min.css"> -->
+    <link type="text/css" rel="stylesheet"  href="ambiance.min.css">
+    <!-- custom styling -->
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <link href= "style.css" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" href="imgs/fevicon.png" type="image/png">
+    <script type="text/javascript" src="codemirror.min.js"></script>
+    <script type="text/javascript" src="clike.min.js"></script>
+
+</head>
+
+<body>
+
+    <div class="title-wraper">
+        <h2 id="ide-title">compile c++ online</h2>
+    </div>
+    <div class="hidden" id="mode_"><%= mode %></div>
+    <div class="hidden" id="input_"><%= input %></div>
+    <div class="hidden" id="code_"><%= code %></div>
+
+    <div class="menu-option">
+        <div>
+            <span class="lang-lable">Language: </span>
+            <select class="langdropdown" id="language" onchange="modeChanged()">
+                <option selected value="cpp14">C++ 14</option>
+            </select>
+
+            <span class="theme-select">Theme: </span>
+            <select class="themedropdown" id="theme" onchange="themeChanged()">
+                <option selected value="ambiance">Ambiance</option>
+            </select>
+
+            <span class="theme-select">Tab Size: </span>
+            <select class="tabdropdown" id="tabSize" onchange="tabSizeChanged()">
+                <option selected value="4">4</option>
+                <option value="8">8</option>
+                <option value="2">2</option>
+                
+            </select>
+            <span class="font-select">Font Size: </span>
+            <select class="fontdropdown" id="fontSize" onchange="fontSizeChanged()">
+                <option value="12px">12px</option>
+                <option selected value="14px">14px</option>
+                <option value="16px">16px</option>
+                <option value="18px">18px</option>
+                <option value="20px">20px</option>
+                <option value="22px">22px</option>
+                <option value="24px">24px</option>
+            </select>
+        </div>
+    </div>
+
+    <div>
+        <div class="code-wraper">
+            <textarea id="code" placeholder="type your code here ..."></textarea>
+        </div>
+
+        <div class="control-options">
+            <div>
+                <button id="run"> Run it!</button>
+            </div>
+            <div>
+                <button id="save">Save it</button>
+            </div>
+
+        <!--<div>
+                <span class="text-file" id="textfile">
+                <input type="text" name="filename" id="filename" value="code.cpp">
+                </span>
+
+            </div>
+        -->
+
+            <div>
+                <span class="text-button" id="showinput" onclick="show_input()">
+                [ &plus; ] Show input
+                </span>
+                <span class="text-button" id="hideinput" onclick="hide_input()" style="display: none;">
+                [ &minus; ] Hide input
+                </span>
+            </div>
+            
+            <div class="cputime-wraper">
+                <label> 
+                cpuTime: 
+                </label>
+                <span id="cpuTime"></span>
+            </div>
+
+            <div class="memory-wraper">
+                <label> 
+                Memory: 
+                </label>
+                <span id="memory"></span>
+            </div>
+           <div class="status-wraper">
+                <label> 
+                statusCode: 
+                </label>
+                <span id="statusCode"></span>
+            </div>
+
+        </div>
+
+        <div>
+            <div class="input-wraper">
+                <textarea id="input" name="input" placeholder="type you input here ..."></textarea>
+            </div>
+            <div class="output-wraper">
+                <textarea readonly id="output" placeholder="output will there ... "></textarea>
+            </div>
+        </div>
+
+
+    </div>
+
+    <footer class="footer">
+        <div>
+            <a href="https://www.linkedin.com/in/pradeep-swe" target="_blank"><img src="imgs/linkedin.png" alt="linkedin" class="social-icon"></a>
+            <a href="https://github.com/sutharp777" target="_blank"><img src="imgs/github.png" alt="github" class="social-icon"></a>
+            <a href="https://stackoverflow.com/users/12537691/sutharp777?tab=profile" target="_blank"><img src="imgs/stack.png" alt="stackoverflow" class="social-icon"></a>
+            <a href="https://sutharp777.github.io" target="_blank"><img src="imgs/website.png" alt="website" class="social-icon"></a>
+        </div>
+
+        <div>Online IDE built with ❤️ using &nbsp;
+            <img class="icon mongodb" src="imgs/mongodb.png" alt="mongodb icon"> &nbsp;
+            <img class="icon express" src="imgs/express.png" alt="express icon"> &nbsp;&nbsp;
+            <img class="icon nodejs" src="imgs/nodejs.png" alt="nodejs icon"> &nbsp; &nbsp;
+            <img class="icon" src="imgs/vscode.png" alt="vscode icon"> &nbsp; and hosted on &nbsp;
+            <img class="icon" src="imgs/azure.png" alt="azure icon">
+        </div>
+
+        <div>
+
+            &copy; 2021 by Pradeep Suthar &nbsp;<a class="alink" href="https://github.com/sutharp777" title="https://github.com/sutharp777" >@sutharp777</a>
+
+        </div>
+    </footer>
+    <script type="text/javascript" src="script.js"></script>
+    <script type="text/javascript" src="css.min.js"></script>
+    <script type="text/javascript" src="simple.min.js"></script>
+    <script type="text/javascript" src="htmlmixed.min.js"></script>
+    <script type="text/javascript" src="xml.min.js"></script>
+
+    <script type="text/javascript" src="python.min.js"></script>
+    <script type="text/javascript" src="go.min.js"></script>
+    <script type="text/javascript" src="javascript.min.js"></script>
+    <script type="text/javascript" src="pascal.min.js"></script>
+    <script type="text/javascript" src="perl.min.js"></script>
+    <script type="text/javascript" src="coffeescript.min.js"></script>
+    <script type="text/javascript" src="php.min.js"></script>
+    <script type="text/javascript" src="haskell.min.js"></script>
+    <script type="text/javascript" src="rust.min.js"></script>
+    <script type="text/javascript" src="brainfuck.min.js"></script>
+    <script type="text/javascript" src="r.min.js"></script>
+    <script type="text/javascript" src="ruby.min.js"></script>
+    <script type="text/javascript" src="sql.min.js"></script>
+    <script type="text/javascript" src="shell.min.js"></script>
+    <script type="text/javascript" src="swift.min.js"></script>
+    <script type="text/javascript" src="dart.min.js"></script>
+
+    <link type="text/css" rel="stylesheet"  href="all.css">
+    <!-- comments feature-->
+    <link type="text/css" rel="stylesheet"  href="fullscreen.min.css">
+    <script type="text/javascript" src="comment.min.js"></script>
+    <!-- <script type="text/javascript" src="/codemirror/js/features/comments/continuecomment.min.js"></script> -->
+    <!--  foldcode feature-->
+    <script type="text/javascript" src="brace-fold.min.js"></script>
+    <script type="text/javascript" src="comment-fold.min.js"></script>
+    <script type="text/javascript" src="foldcode.min.js"></script>
+    <script type="text/javascript" src="foldgutter.min.js"></script>
+    <script type="text/javascript" src="indent-fold.min.js"></script>
+    <link type="text/css" rel="stylesheet"  href="foldgutter.min.css">
+
+    <!-- features -->
+    <!-- <link type="text/css" rel="stylesheet"  href="/codemirror/js/features/dialog.min.css"> -->
+    <script type="text/javascript" src="active-line.min.js"></script>
+    <!-- <script type="text/javascript" src="/codemirror/js/features/dialog.min.js"></script> -->
+    <!-- <script type="text/javascript" src="/codemirror/js/features/jump-to-line.min.js"></script> -->
+    <script type="text/javascript" src="matchbrackets.min.js"></script>
+    <script type="text/javascript" src="match-highlighter.min.js"></script>
+    <script type="text/javascript" src="search.min.js"></script>
+    <script type="text/javascript" src="searchcursor.min.js"></script>
+
+</body>
+
+</html>

@@ -1,102 +1,159 @@
-var request = require('request');
+var request = require('request')
 const express = require('express')
+const mongoose = require('mongoose')
+require('dotenv').config()
 app = new express()
 
-app.code=''
-app.language=''
-app.input=''
-app.result={
-    error:null,
-    response:null,
-    body:{
-        cpuTime:'',
-        output:'',
-        statusCode:'',
-        memory:''    
-    }
-}
-// app.use(bodyParser.urlencoded({extended:true}))
-app.use(express.static('public'))
-app.set('view engine','ejs')
+app.use(express.urlencoded({ extended: true }));
+const bodyParser = require('body-parser')
+app.set('view engine', 'ejs')
 
+app.use(bodyParser.json())
+// app.use(express.static(__dirname ))
+app.use(express.static(__dirname + '/public'))
+app.use(express.static(__dirname + '/public/jQuery/'))
+app.use(express.static(__dirname + '/public/imgs/'))
+app.use(express.static(__dirname + '/public/codemirror/css/'))
+app.use(express.static(__dirname + '/public/codemirror/languages/'))
+app.use(express.static(__dirname + '/public/codemirror/themes/'))
+app.use(express.static(__dirname + '/public/codemirror/js/'))
+app.use(express.static(__dirname + '/public/codemirror/js/features/'))
+app.use(express.static(__dirname + '/public/codemirror/js/features/comments/'))
+app.use(express.static(__dirname + '/public/codemirror/js/features/foldcode/'))
+
+const dbURI = `mongodb+srv://pradeep:${process.env.MONGO_KEY}@ide-cluster.utfou.mongodb.net/ideseven?retryWrites=true&w=majority`
+
+// const dbURI = `mongodb://localhost:27017/ideseven`
+
+mongoose.connect(dbURI, {useNewUrlParser: true, useUnifiedTopology: true}
+	).then( ()=> {
+		console.log("db connected")
+	}).catch((err)=> {
+		console.log(err)
+})
+
+
+const codeSchema = new mongoose.Schema({
+	_id:{
+		type: String,
+		required: true
+
+	},
+	title:{
+		type: String,
+		required: false
+
+	},
+	mode: {
+		type: String,
+		required: true
+	},
+	code: {
+		type: String,
+		required: true
+	},
+	input: {
+		type: String,
+		required: false
+	}
+},{timestamps:true})
+
+const Code = new mongoose.model("SavedCode", codeSchema)
+
+async function getCode(codeid){
+	try{
+		const promis = await Code.find({_id:codeid})
+		return promis
+		// console.log(promis)
+	}catch(err){
+		console.error(err)
+	}
+}
 
 app.use(express.urlencoded({
     extended: true
-  }))
+}))
 
-app.get('/',(req,res)=>{
-    res.render('home',{
-        result:app.result,
-        data:{
-            input:app.input,
-            code:app.code,
-            language:app.language
-        }
-    }
-    )
-})
 
-app.get('/about',(req,res)=>{
-    res.render('about')
-})
-
-app.get('/api',(req,res)=>{
-    res.render('api')
-})
-
-app.post('/running',(req,res)=>{
-    app.language = req.body.language
-    app.code = req.body.code
-    app.input = req.body.input
-    // console.log(
-    //     app.language = req.body.language,
-    //     app.code = req.body.code,
-    //     app.input = req.body.input
-        
-    //     )
-    Run()
-    .then( () =>{
-        res.redirect('/')
+app.get('/', (req, res) => {
+    res.render('index', {
+      input: '',
+      code: '',
+      mode: ''
     })
-    
-    // res.result
 })
 
 
-const port = process.env.PORT ||3000;
-app.listen(port,()=>console.log(`Listening on port ${port}`))
+app.get('/:id/', async (req, res) => {
 
+	getCode(req.params.id).then(async (result)=>{
+		
+		if( await result === []){
+			res.redirect('/')
+		}
+		else{
+			res.render('index', {
+		      input: await result[0].input,
+		      code: await result[0].code,
+		      mode: await result[0].mode
+	    	})
+		}
+	}).catch(error=>{
+		res.redirect('/')
+	})
 
-function Run(){
+})
+
+app.post('/running', (req, res) => {
+
     var program = {
-        clientId: "b39373de11efb44eb78dd9946a8e29d8",
-        clientSecret:"c9bcc22ef5c05560da9d85752572c800c08c2bb480abc8538ccfccd4a5355ff8",
-        script : app.code,
-        stdin: app.input,
-        language: app.language,
+        clientId: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        script: req.body.code,
+        stdin: req.body.input,
+        language: req.body.language,
         versionIndex: 0
-    };
-    return new Promise((resolve,reject)=>{
+    }
 
-        request({
+    request({
             url: 'https://api.jdoodle.com/v1/execute',
             method: "POST",
             json: JSON.stringify(program)
         },
-        function (error, response, body) {
-            if(!error)
-                resolve()
-            else
-                reject('Error is there, Some thing Went Wrong')
-            console.log('error:', error);
-            console.log('statusCode:', response && response.statusCode);
-            console.log('body:', body);
-            app.result = {
-                error: error,
-                response: response,
-                body: body
-            };
-        });
-    })
-        
+        function(error, response, body) {
+            // console.log('error:', error)
+            // console.log('statusCode:', response && response.statusCode)
+            // console.log('body:', body)
+            res.json(body)
+            res.end()
+        })
+})
+
+
+
+app.post('/save', async (req, res) => {
+
+    let program = {
+    	_id: req.body._id,
+        code: req.body.code,
+        input: req.body.input,
+        mode: req.body.language
     }
+
+    try{
+    	const demoCode = new Code(program)
+		demoCode.save().then(async (feedback)=>{
+			// console.log(await feedback)
+			if(await feedback)
+				await res.redirect('/'+req.body._id)
+		})
+
+	}catch(err){
+		// console.error(err)
+		return
+	}
+
+})
+
+const port = process.env.PORT || 3000
+app.listen(port, () => console.log(`Listening on port ${port}....`))
