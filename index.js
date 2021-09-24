@@ -28,21 +28,21 @@ const clientSecret = process.env.CLIENT_SECRET
 // const dbURI = `mongodb://localhost:27017/ideseven`
 
 
-mongoose.connect(dbURI, {useNewUrlParser: true, useUnifiedTopology: true}
-	).then( ()=> {
-		console.log("db connected")
-	}).catch((err)=> {
-		console.log(err)
+mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true }
+).then(() => {
+	console.log("db connected")
+}).catch((err) => {
+	console.log(err)
 })
 
 
 const codeSchema = new mongoose.Schema({
-	_id:{
+	_id: {
 		type: String,
 		required: true
 
 	},
-	title:{
+	title: {
 		type: String,
 		required: false
 
@@ -59,98 +59,98 @@ const codeSchema = new mongoose.Schema({
 		type: String,
 		required: false
 	}
-},{timestamps:true})
+}, { timestamps: true })
 
 const Code = new mongoose.model("SavedCode", codeSchema)
 
-async function getCode(codeid){
-	try{
-		const promis = await Code.find({_id:codeid})
+async function getCode(codeid) {
+	try {
+		const promis = await Code.find({ _id: codeid })
 		return promis
 		// console.log(promis)
-	}catch(err){
+	} catch (err) {
 		console.error(err)
 	}
 }
 
 app.use(express.urlencoded({
-    extended: true
+	extended: true
 }))
 
 
 app.get('/', (req, res) => {
-    res.render('index', {
-      input: '',
-      code: '',
-      mode: ''
-    })
+	res.render('index', {
+		input: '',
+		code: '',
+		mode: ''
+	})
 })
 
 
 app.get('/:id/', async (req, res) => {
 
-	getCode(req.params.id).then(async (result)=>{
-		
-		if( await result === []){
+	getCode(req.params.id).then(async (result) => {
+
+		if (await result === []) {
 			res.redirect('/')
 		}
-		else{
+		else {
 			res.render('index', {
-		      input: await result[0].input,
-		      code: await result[0].code,
-		      mode: await result[0].mode
-	    	})
+				input: await result[0].input,
+				code: await result[0].code,
+				mode: await result[0].mode
+			})
 		}
-	}).catch(error=>{
+	}).catch(error => {
 		res.redirect('/')
 	})
 
 })
 app.post('/running', (req, res) => {
 
-    var program = {
-        clientId: clientId,
-        clientSecret: clientSecret,
-        script: req.body.code,
-        stdin: req.body.input,
-        language: req.body.language,
-        versionIndex: 0
-    }
+	var program = {
+		clientId: clientId,
+		clientSecret: clientSecret,
+		script: req.body.code,
+		stdin: req.body.input,
+		language: req.body.language,
+		versionIndex: 0
+	}
 
-    request({
-            url: 'https://api.jdoodle.com/v1/execute',
-            method: "POST",
-            json: JSON.stringify(program)
-        },
-        function(error, response, body) {
-            // console.log('error:', error)
-            // console.log('statusCode:', response && response.statusCode)
-            // console.log('body:', body)
-            res.json(body)
-            res.end()
-        })
+	request({
+		url: 'https://api.jdoodle.com/v1/execute',
+		method: "POST",
+		json: JSON.stringify(program)
+	},
+		function (error, response, body) {
+			// console.log('error:', error)
+			// console.log('statusCode:', response && response.statusCode)
+			// console.log('body:', body)
+			res.json(body)
+			res.end()
+		})
 })
 
 
 
 app.post('/save', async (req, res) => {
 
-    let program = {
-    	_id: req.body._id,
-        code: req.body.code,
-        input: req.body.input,
-        mode: req.body.language
-    }
+	let program = {
+		_id: req.body._id,
+		code: req.body.code,
+		input: req.body.input,
+		mode: req.body.language
+	}
 
-    try{
-    	const demoCode = new Code(program)
-		demoCode.save().then(async (feedback)=>{
+	try {
+		const demoCode = new Code(program)
+		demoCode.save().then(async (feedback) => {
 			// console.log(await feedback)
-			if(await feedback)
-				await res.redirect('/'+req.body._id)
+			if (await feedback)
+				await res.redirect('/' + req.body._id)
 		})
 
-	}catch(err){
+	} catch (err) {
 		// console.error(err)
 		return
 	}

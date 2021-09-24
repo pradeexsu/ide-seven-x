@@ -101,19 +101,19 @@ $(document).ready(() => {
         foldGutter: true,
         gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
         extraKeys: {
-            "Ctrl-Q": function(cm) {
+            "Ctrl-Q": function (cm) {
                 cm.foldCode(cm.getCursor());
             },
             "Ctrl-Space": "autocomplete",
             "Tab": "indentMore",
             "Shift-Tab": "indentLess",
-            "F11": function(cm) {
+            "F11": function (cm) {
                 cm.setOption("fullScreen", !cm.getOption("fullScreen"));
             },
-            "Esc": function(cm) {
+            "Esc": function (cm) {
                 if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
             },
-            "F8": function(cm) {
+            "F8": function (cm) {
                 if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
                 Run();
             },
@@ -127,7 +127,7 @@ $(document).ready(() => {
 
     theIDE.setSize(null, $(window).height() * .6);
 
-    CodeMirror.commands.autocomplete = function(cm) {
+    CodeMirror.commands.autocomplete = function (cm) {
         CodeMirror.showHint(cm, CodeMirror.hint.clike, {
             async: true
         });
@@ -161,7 +161,7 @@ $(document).ready(() => {
         let code_ = document.getElementById("code_").innerText
 
         theIDE.setOption("value", code_)
-        
+
         document.title = "Compaile " + lang[mode_] + " Online"
 
         document.getElementById('ide-title').innerHTML = document.title
@@ -170,8 +170,8 @@ $(document).ready(() => {
 
         document.getElementById('input').value = input_
     }
-    document.querySelector('#run').addEventListener('click',Run)
-    document.querySelector('#save').addEventListener('click',Save)
+    document.querySelector('#run').addEventListener('click', Run)
+    document.querySelector('#save').addEventListener('click', Save)
 })
 
 async function Run() {
@@ -200,7 +200,7 @@ async function Run() {
         body: JSON.stringify(inputObject)
 
     }
-    fetch('/running', options).then( async (result)=>{
+    fetch('/running', options).then(async (result) => {
         const data = await result.json()
         document.querySelector('#output').value = await data.output
         document.querySelector("#cpuTime").innerText = await data.cpuTime
@@ -210,9 +210,9 @@ async function Run() {
             scrollTop: $("#output").offset().top
         }, 500);
 
-    }).catch((err)=>{
+    }).catch((err) => {
         document.querySelector('#output').value = "Error() unable to run your code please try later."
-    }).then((nor)=>{
+    }).then((nor) => {
         NormalizeRunButton()
     })
 
@@ -248,11 +248,11 @@ async function Save() {
         body: JSON.stringify(saveObject)
     }
 
-    fetch('/save', options).then( async (result ) => {
+    fetch('/save', options).then(async (result) => {
         NormalizeSaveButton()
-        if(await result)
+        if (await result)
             window.location.href = `/${saveObject._id}`
-    }).catch((err)=>{
+    }).catch((err) => {
         document.querySelector("#output").innerText = "error in saving your code try again later"
     })
 
