@@ -5,8 +5,7 @@
     "main": "index.js",
     "scripts": {
         "test": "test",
-        "start": "node index.js",
-        "debug": "nodemon index.js"
+        "start": "node index.js"
     },
     "author": "pradeep",
     "license": "MIT",
