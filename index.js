@@ -22,6 +22,9 @@ app.use(express.static(__dirname + '/public/codemirror/js/features/comments/'))
 app.use(express.static(__dirname + '/public/codemirror/js/features/foldcode/'))
 
 const dbURI = process.env.MONGO_URI
+const clientId = process.env.CLIENT_ID
+const clientSecret = process.env.CLIENT_SECRET
+
 // const dbURI = `mongodb://localhost:27017/ideseven`
 
 
@@ -103,12 +106,11 @@ app.get('/:id/', async (req, res) => {
 	})
 
 })
-
 app.post('/running', (req, res) => {
 
     var program = {
-        clientId: process.env.CLIENT_ID,
-        clientSecret: process.env.CLIENT_SECRET,
+        clientId: clientId,
+        clientSecret: clientSecret,
         script: req.body.code,
         stdin: req.body.input,
         language: req.body.language,
