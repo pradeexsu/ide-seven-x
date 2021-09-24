@@ -6,6 +6,7 @@
     "scripts": {
         "test": "test",
         "start": "node index.js",
+        "debug": "nodemon index.js",
         "build": "start build"
     },
     "author": "pradeep",

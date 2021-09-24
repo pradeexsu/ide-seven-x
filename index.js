@@ -21,9 +21,9 @@ app.use(express.static(__dirname + '/public/codemirror/js/features/'))
 app.use(express.static(__dirname + '/public/codemirror/js/features/comments/'))
 app.use(express.static(__dirname + '/public/codemirror/js/features/foldcode/'))
 
-const dbURI = `mongodb+srv://pradeep:${process.env.MONGO_KEY}@ide-cluster.utfou.mongodb.net/ideseven?retryWrites=true&w=majority`
-
+const dbURI = process.env.MONGO_URI
 // const dbURI = `mongodb://localhost:27017/ideseven`
+
 
 mongoose.connect(dbURI, {useNewUrlParser: true, useUnifiedTopology: true}
 	).then( ()=> {
